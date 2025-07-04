@@ -1,0 +1,23 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: npx eslint --fix {staged_files}
+      stage_fixed: true
+    format:
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+    typecheck:
+      run: npx tsc --noEmit
+
+pre-push:
+  parallel: true
+  commands:
+    test:
+      run: npm test
+    build:
+      run: npm run build
+    lint:
+      run: npm run lint
+    format:
+      run: npm run format

@@ -1,0 +1,55 @@
+{
+  "name": "nodefling",
+  "version": "1.0.0",
+  "description": "A comprehensive Node.js exceptions library with utilities for all backend frameworks",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean && npm run test",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "nodejs",
+    "exceptions",
+    "error-handling",
+    "http-status",
+    "backend",
+    "express",
+    "fastify",
+    "koa",
+    "nestjs",
+    "utilities"
+  ],
+  "author": "Fullstack-Dopamine <https://github.com/Fullstack-Dopamine>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "eslint": "^8.0.0",
+    "lefthook": "^1.11.16",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fullstack-Dopamine/nodefling.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Fullstack-Dopamine/nodefling/issues"
+  },
+  "homepage": "https://github.com/Fullstack-Dopamine/nodefling#readme"
+}
