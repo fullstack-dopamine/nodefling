@@ -11,7 +11,7 @@ export class ValidationException extends BaseException {
       message: 'Validation Error',
       statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
       code: 'VALIDATION_ERROR',
-      ...options
+      ...options,
     });
   }
 }
@@ -26,7 +26,7 @@ export class AuthenticationException extends BaseException {
       message: 'Authentication Failed',
       statusCode: StatusCodes.UNAUTHORIZED,
       code: 'AUTHENTICATION_FAILED',
-      ...options
+      ...options,
     });
   }
 }
@@ -41,7 +41,7 @@ export class AuthorizationException extends BaseException {
       message: 'Authorization Failed',
       statusCode: StatusCodes.FORBIDDEN,
       code: 'AUTHORIZATION_FAILED',
-      ...options
+      ...options,
     });
   }
 }
@@ -51,13 +51,17 @@ export class AuthorizationException extends BaseException {
  * Used when a specific resource is not found
  */
 export class ResourceNotFoundException extends BaseException {
-  constructor(resourceType: string, resourceId: string, options: ExceptionOptions = {}) {
+  constructor(
+    resourceType: string,
+    resourceId: string,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `${resourceType} with id '${resourceId}' not found`,
       statusCode: StatusCodes.NOT_FOUND,
       code: 'RESOURCE_NOT_FOUND',
       details: { resourceType, resourceId },
-      ...options
+      ...options,
     });
   }
 }
@@ -67,13 +71,18 @@ export class ResourceNotFoundException extends BaseException {
  * Used when trying to create a resource that already exists
  */
 export class DuplicateResourceException extends BaseException {
-  constructor(resourceType: string, field: string, value: string, options: ExceptionOptions = {}) {
+  constructor(
+    resourceType: string,
+    field: string,
+    value: string,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `${resourceType} with ${field} '${value}' already exists`,
       statusCode: StatusCodes.CONFLICT,
       code: 'DUPLICATE_RESOURCE',
       details: { resourceType, field, value },
-      ...options
+      ...options,
     });
   }
 }
@@ -89,7 +98,7 @@ export class InsufficientPermissionsException extends BaseException {
       statusCode: StatusCodes.FORBIDDEN,
       code: 'INSUFFICIENT_PERMISSIONS',
       details: { requiredPermission },
-      ...options
+      ...options,
     });
   }
 }
@@ -106,7 +115,7 @@ export class RateLimitExceededException extends BaseException {
       code: 'RATE_LIMIT_EXCEEDED',
       details: { limit, window },
       retryable: true,
-      ...options
+      ...options,
     });
   }
 }
@@ -116,13 +125,17 @@ export class RateLimitExceededException extends BaseException {
  * Used when a business rule is violated
  */
 export class BusinessRuleViolationException extends BaseException {
-  constructor(rule: string, details?: Record<string, any>, options: ExceptionOptions = {}) {
+  constructor(
+    rule: string,
+    details?: Record<string, any>,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `Business rule violation: ${rule}`,
       statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
       code: 'BUSINESS_RULE_VIOLATION',
       details: { rule, ...details },
-      ...options
+      ...options,
     });
   }
 }
@@ -138,7 +151,7 @@ export class DataIntegrityException extends BaseException {
       statusCode: StatusCodes.CONFLICT,
       code: 'DATA_INTEGRITY_VIOLATION',
       details: { constraint },
-      ...options
+      ...options,
     });
   }
 }
@@ -155,7 +168,7 @@ export class ConfigurationException extends BaseException {
       code: 'CONFIGURATION_ERROR',
       details: { configKey },
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -171,7 +184,7 @@ export class FeatureNotAvailableException extends BaseException {
       statusCode: StatusCodes.SERVICE_UNAVAILABLE,
       code: 'FEATURE_NOT_AVAILABLE',
       details: { feature },
-      ...options
+      ...options,
     });
   }
 }
@@ -188,7 +201,7 @@ export class MaintenanceModeException extends BaseException {
       code: 'MAINTENANCE_MODE',
       details: { estimatedDuration },
       retryable: true,
-      ...options
+      ...options,
     });
   }
-} 
+}

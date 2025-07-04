@@ -27,14 +27,19 @@ import {
   generateRequestId,
   isBaseException,
   shouldLogError,
-  formatErrorForLogging
+  formatErrorForLogging,
 } from '../utils/error-utils';
 
 /**
  * Express middleware to add request ID to all requests
  */
-export function requestIdMiddleware(req: ExpressRequest, res: ExpressResponse, next: ExpressNextFunction): void {
-  const requestId = (req as any).headers?.['x-request-id'] as string || generateRequestId();
+export function requestIdMiddleware(
+  req: ExpressRequest,
+  res: ExpressResponse,
+  next: ExpressNextFunction
+): void {
+  const requestId =
+    ((req as any).headers?.['x-request-id'] as string) || generateRequestId();
   (req as any).requestId = requestId;
   res.setHeader('X-Request-ID', requestId);
   next();
@@ -44,9 +49,17 @@ export function requestIdMiddleware(req: ExpressRequest, res: ExpressResponse, n
  * Express middleware to handle async errors
  */
 export function asyncErrorHandler(
-  fn: (req: ExpressRequest, res: ExpressResponse, next: ExpressNextFunction) => Promise<any>
+  fn: (
+    req: ExpressRequest,
+    res: ExpressResponse,
+    next: ExpressNextFunction
+  ) => Promise<any>
 ) {
-  return (req: ExpressRequest, res: ExpressResponse, next: ExpressNextFunction): void => {
+  return (
+    req: ExpressRequest,
+    res: ExpressResponse,
+    next: ExpressNextFunction
+  ): void => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 }
@@ -57,8 +70,7 @@ export function asyncErrorHandler(
 export function errorHandler(
   error: any,
   req: ExpressRequest,
-  res: ExpressResponse,
-  _next: ExpressNextFunction
+  res: ExpressResponse
 ): void {
   // Add request context to the error
   if (isBaseException(error)) {
@@ -78,16 +90,18 @@ export function errorHandler(
       url: req.url,
       method: req.method,
       ip: req.ip,
-      userAgent: req.get('User-Agent'),
-      requestId: (req as any).requestId
     });
-
+    // eslint-disable-next-line no-console
     console.error(logMessage);
   }
 
-  // Create error response
-  const errorResponse = createErrorResponse(error, process.env.NODE_ENV === 'development');
-  const statusCode = isBaseException(error) ? error.statusCode : (error.statusCode || 500);
+  const errorResponse = createErrorResponse(
+    error,
+    process.env.NODE_ENV === 'development'
+  );
+  const statusCode = isBaseException(error)
+    ? error.statusCode
+    : error.statusCode || 500;
 
   // Send response
   res.status(statusCode).json(errorResponse);
@@ -96,7 +110,11 @@ export function errorHandler(
 /**
  * Express middleware to handle 404 errors
  */
-export function notFoundHandler(req: ExpressRequest, _res: ExpressResponse, next: ExpressNextFunction): void {
+export function notFoundHandler(
+  req: ExpressRequest,
+  _res: ExpressResponse,
+  next: ExpressNextFunction
+): void {
   const error = new Error(`Route ${req.method} ${req.url} not found`);
   (error as any).statusCode = 404;
   next(error);
@@ -106,7 +124,11 @@ export function notFoundHandler(req: ExpressRequest, _res: ExpressResponse, next
  * Express middleware to validate request body
  */
 export function validateBody(schema: Record<string, any>) {
-  return (req: ExpressRequest, _res: ExpressResponse, next: ExpressNextFunction): void => {
+  return (
+    req: ExpressRequest,
+    _res: ExpressResponse,
+    next: ExpressNextFunction
+  ): void => {
     try {
       const { validateRequiredFields } = require('../utils/error-utils');
       validateRequiredFields((req as any).body, Object.keys(schema));
@@ -174,18 +196,29 @@ export function rateLimitErrorHandler(
 /**
  * Express middleware to add security headers
  */
-export function securityHeadersMiddleware(_req: ExpressRequest, res: ExpressResponse, next: ExpressNextFunction): void {
+export function securityHeadersMiddleware(
+  _req: ExpressRequest,
+  res: ExpressResponse,
+  next: ExpressNextFunction
+): void {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader(
+    'Strict-Transport-Security',
+    'max-age=31536000; includeSubDomains'
+  );
   next();
 }
 
 /**
  * Express middleware to log requests
  */
-export function requestLoggerMiddleware(req: ExpressRequest, res: ExpressResponse, next: ExpressNextFunction): void {
+export function requestLoggerMiddleware(
+  req: ExpressRequest,
+  res: ExpressResponse,
+  next: ExpressNextFunction
+): void {
   const start = Date.now();
 
   res.on('finish', () => {
@@ -200,4 +233,4 @@ export function requestLoggerMiddleware(req: ExpressRequest, res: ExpressRespons
   });
 
   next();
-} 
+}

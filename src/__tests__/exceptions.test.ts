@@ -18,7 +18,7 @@ import {
   validateEmail,
   validateUrl,
   generateRequestId,
-  retryWithBackoff
+  retryWithBackoff,
 } from '../index';
 
 describe('NodeFling Exceptions Library', () => {
@@ -58,7 +58,7 @@ describe('NodeFling Exceptions Library', () => {
         context: { action: 'test' },
         isOperational: false,
         retryable: true,
-        logLevel: 'warn' as const
+        logLevel: 'warn' as const,
       };
 
       const error = new TestException(customOptions);
@@ -78,7 +78,7 @@ describe('NodeFling Exceptions Library', () => {
     it('should convert to JSON correctly', () => {
       const error = new BadRequestException({
         message: 'Test error',
-        details: { field: 'test' }
+        details: { field: 'test' },
       });
 
       const json = error.toJSON();
@@ -93,7 +93,7 @@ describe('NodeFling Exceptions Library', () => {
     it('should create standardized response', () => {
       const error = new NotFoundException({
         message: 'Resource not found',
-        requestId: 'req-123'
+        requestId: 'req-123',
       });
 
       const response = error.toResponse();
@@ -139,7 +139,7 @@ describe('NodeFling Exceptions Library', () => {
     it('should create BadRequestException correctly', () => {
       const error = new BadRequestException({
         message: 'Invalid input',
-        details: { field: 'email' }
+        details: { field: 'email' },
       });
 
       expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
@@ -149,7 +149,7 @@ describe('NodeFling Exceptions Library', () => {
 
     it('should create NotFoundException correctly', () => {
       const error = new NotFoundException({
-        message: 'User not found'
+        message: 'User not found',
       });
 
       expect(error.statusCode).toBe(StatusCodes.NOT_FOUND);
@@ -175,9 +175,15 @@ describe('NodeFling Exceptions Library', () => {
     });
 
     it('should create DuplicateResourceException with details', () => {
-      const error = new DuplicateResourceException('User', 'email', 'test@example.com');
+      const error = new DuplicateResourceException(
+        'User',
+        'email',
+        'test@example.com'
+      );
 
-      expect(error.message).toBe("User with email 'test@example.com' already exists");
+      expect(error.message).toBe(
+        "User with email 'test@example.com' already exists"
+      );
       expect(error.details.resourceType).toBe('User');
       expect(error.details.field).toBe('email');
       expect(error.details.value).toBe('test@example.com');
@@ -187,7 +193,9 @@ describe('NodeFling Exceptions Library', () => {
     it('should create RateLimitExceededException as retryable', () => {
       const error = new RateLimitExceededException(100, 'hour');
 
-      expect(error.message).toBe('Rate limit exceeded. Limit: 100 requests per hour');
+      expect(error.message).toBe(
+        'Rate limit exceeded. Limit: 100 requests per hour'
+      );
       expect(error.retryable).toBe(true);
       expect(error.details.limit).toBe(100);
       expect(error.details.window).toBe('hour');
@@ -205,7 +213,10 @@ describe('NodeFling Exceptions Library', () => {
     });
 
     it('should create ExternalServiceException with service details', () => {
-      const error = new ExternalServiceException('PaymentService', '/api/payments');
+      const error = new ExternalServiceException(
+        'PaymentService',
+        '/api/payments'
+      );
 
       expect(error.message).toBe('External service error: PaymentService');
       expect(error.retryable).toBe(true);
@@ -270,7 +281,9 @@ describe('NodeFling Exceptions Library', () => {
     describe('validateRequiredFields', () => {
       it('should pass for valid object', () => {
         const obj = { name: 'John', email: 'john@example.com' };
-        expect(() => validateRequiredFields(obj, ['name', 'email'])).not.toThrow();
+        expect(() =>
+          validateRequiredFields(obj, ['name', 'email'])
+        ).not.toThrow();
       });
 
       it('should throw for missing fields', () => {
@@ -340,7 +353,9 @@ describe('NodeFling Exceptions Library', () => {
         (error as any).code = 'ECONNRESET';
         const fn = vi.fn().mockRejectedValue(error);
 
-        await expect(retryWithBackoff(fn, 2, 10, 100)).rejects.toThrow('ECONNRESET');
+        await expect(retryWithBackoff(fn, 2, 10, 100)).rejects.toThrow(
+          'ECONNRESET'
+        );
         expect(fn).toHaveBeenCalledTimes(3); // Initial + 2 retries
       });
     });
@@ -373,16 +388,19 @@ describe('NodeFling Exceptions Library', () => {
     it('should create ValidationException with custom message and details', () => {
       const error = new ValidationException({
         message: 'Custom validation failed',
-        details: { field: 'email', reason: 'invalid format' }
+        details: { field: 'email', reason: 'invalid format' },
       });
       expect(error.message).toBe('Custom validation failed');
-      expect(error.details).toEqual({ field: 'email', reason: 'invalid format' });
+      expect(error.details).toEqual({
+        field: 'email',
+        reason: 'invalid format',
+      });
     });
 
     it('should work with error utilities', () => {
       const error = new ValidationException({
         message: 'Invalid input',
-        details: { field: 'username' }
+        details: { field: 'username' },
       });
       const json = error.toJSON();
       expect(json.name).toBe('ValidationException');
@@ -393,4 +411,4 @@ describe('NodeFling Exceptions Library', () => {
       expect(response.error.statusCode).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
     });
   });
-}); 
+});

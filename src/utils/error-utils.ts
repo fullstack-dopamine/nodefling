@@ -29,13 +29,14 @@ export function isRetryableError(error: any): boolean {
     'ENETUNREACH',
     'ECONNRESET',
     'EPIPE',
-    'EAI_AGAIN'
+    'EAI_AGAIN',
   ];
 
-  return retryableErrors.some(code =>
-    error.code === code ||
-    error.message?.includes(code) ||
-    error.stack?.includes(code)
+  return retryableErrors.some(
+    code =>
+      error.code === code ||
+      error.message?.includes(code) ||
+      error.stack?.includes(code)
   );
 }
 
@@ -48,9 +49,11 @@ export function isOperationalError(error: any): boolean {
   }
 
   // Consider most errors as operational unless they're clearly programming errors
-  return !error.stack?.includes('TypeError') &&
+  return (
+    !error.stack?.includes('TypeError') &&
     !error.stack?.includes('ReferenceError') &&
-    !error.stack?.includes('SyntaxError');
+    !error.stack?.includes('SyntaxError')
+  );
 }
 
 /**
@@ -67,14 +70,17 @@ export function extractErrorDetails(error: any): Record<string, any> {
     stack: error.stack,
     code: error.code,
     statusCode: error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 }
 
 /**
  * Create a standardized error response for API frameworks
  */
-export function createErrorResponse(error: any, includeStack = false): Record<string, any> {
+export function createErrorResponse(
+  error: any,
+  includeStack = false
+): Record<string, any> {
   if (isBaseException(error)) {
     const response = error.toResponse();
     if (includeStack && process.env.NODE_ENV === 'development') {
@@ -90,8 +96,9 @@ export function createErrorResponse(error: any, includeStack = false): Record<st
       name: error.name || 'Error',
       message: error.message || 'Internal Server Error',
       statusCode,
-      ...(includeStack && process.env.NODE_ENV === 'development' && { stack: error.stack })
-    }
+      ...(includeStack &&
+        process.env.NODE_ENV === 'development' && { stack: error.stack }),
+    },
   };
 }
 
@@ -151,8 +158,9 @@ export function validateRequiredFields(
   obj: Record<string, any>,
   requiredFields: string[]
 ): void {
-  const missingFields = requiredFields.filter(field =>
-    obj[field] === undefined || obj[field] === null || obj[field] === ''
+  const missingFields = requiredFields.filter(
+    field =>
+      obj[field] === undefined || obj[field] === null || obj[field] === ''
   );
 
   if (missingFields.length > 0) {
@@ -183,14 +191,20 @@ export function validateUrl(url: string): boolean {
 /**
  * Sanitize error message for production
  */
-export function sanitizeErrorMessage(message: string, isProduction = false): string {
+export function sanitizeErrorMessage(
+  message: string,
+  isProduction = false
+): string {
   if (!isProduction) {
     return message;
   }
 
   // Remove sensitive information from error messages
   return message
-    .replace(/password['"]?\s*[:=]\s*['"]?[^'"]+['"]?/gi, 'password: [REDACTED]')
+    .replace(
+      /password['"]?\s*[:=]\s*['"]?[^'"]+['"]?/gi,
+      'password: [REDACTED]'
+    )
     .replace(/token['"]?\s*[:=]\s*['"]?[^'"]+['"]?/gi, 'token: [REDACTED]')
     .replace(/key['"]?\s*[:=]\s*['"]?[^'"]+['"]?/gi, 'key: [REDACTED]')
     .replace(/secret['"]?\s*[:=]\s*['"]?[^'"]+['"]?/gi, 'secret: [REDACTED]');
@@ -227,7 +241,10 @@ export function parseError(error: any): Error {
 /**
  * Check if error should be logged
  */
-export function shouldLogError(error: any, logLevel: 'error' | 'warn' | 'info' | 'debug' = 'error'): boolean {
+export function shouldLogError(
+  error: any,
+  logLevel: 'error' | 'warn' | 'info' | 'debug' = 'error'
+): boolean {
   if (isBaseException(error)) {
     const errorLogLevel = error.logLevel;
     const logLevels = { error: 0, warn: 1, info: 2, debug: 3 };
@@ -240,9 +257,12 @@ export function shouldLogError(error: any, logLevel: 'error' | 'warn' | 'info' |
 /**
  * Format error for logging
  */
-export function formatErrorForLogging(error: any, context?: Record<string, any>): string {
+export function formatErrorForLogging(
+  error: any,
+  context?: Record<string, any>
+): string {
   const details = extractErrorDetails(error);
   const contextStr = context ? ` | Context: ${JSON.stringify(context)}` : '';
 
   return `${details.name}: ${details.message} | Status: ${details.statusCode} | Timestamp: ${details.timestamp}${contextStr}`;
-} 
+}

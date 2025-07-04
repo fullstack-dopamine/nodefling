@@ -11,7 +11,7 @@ export class BadRequestException extends BaseException {
       message: 'Bad Request',
       statusCode: StatusCodes.BAD_REQUEST,
       code: 'BAD_REQUEST',
-      ...options
+      ...options,
     });
   }
 }
@@ -26,7 +26,7 @@ export class UnauthorizedException extends BaseException {
       message: 'Unauthorized',
       statusCode: StatusCodes.UNAUTHORIZED,
       code: 'UNAUTHORIZED',
-      ...options
+      ...options,
     });
   }
 }
@@ -41,7 +41,7 @@ export class ForbiddenException extends BaseException {
       message: 'Forbidden',
       statusCode: StatusCodes.FORBIDDEN,
       code: 'FORBIDDEN',
-      ...options
+      ...options,
     });
   }
 }
@@ -56,7 +56,7 @@ export class NotFoundException extends BaseException {
       message: 'Not Found',
       statusCode: StatusCodes.NOT_FOUND,
       code: 'NOT_FOUND',
-      ...options
+      ...options,
     });
   }
 }
@@ -71,7 +71,7 @@ export class MethodNotAllowedException extends BaseException {
       message: 'Method Not Allowed',
       statusCode: StatusCodes.METHOD_NOT_ALLOWED,
       code: 'METHOD_NOT_ALLOWED',
-      ...options
+      ...options,
     });
   }
 }
@@ -86,7 +86,7 @@ export class ConflictException extends BaseException {
       message: 'Conflict',
       statusCode: StatusCodes.CONFLICT,
       code: 'CONFLICT',
-      ...options
+      ...options,
     });
   }
 }
@@ -101,7 +101,7 @@ export class UnprocessableEntityException extends BaseException {
       message: 'Unprocessable Entity',
       statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
       code: 'UNPROCESSABLE_ENTITY',
-      ...options
+      ...options,
     });
   }
 }
@@ -117,7 +117,7 @@ export class TooManyRequestsException extends BaseException {
       statusCode: StatusCodes.TOO_MANY_REQUESTS,
       code: 'TOO_MANY_REQUESTS',
       retryable: true,
-      ...options
+      ...options,
     });
   }
 }
@@ -133,7 +133,7 @@ export class InternalServerErrorException extends BaseException {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       code: 'INTERNAL_SERVER_ERROR',
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -150,7 +150,7 @@ export class ServiceUnavailableException extends BaseException {
       code: 'SERVICE_UNAVAILABLE',
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -167,7 +167,7 @@ export class GatewayTimeoutException extends BaseException {
       code: 'GATEWAY_TIMEOUT',
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
-} 
+}

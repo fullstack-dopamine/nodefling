@@ -14,7 +14,7 @@ export class DatabaseConnectionException extends BaseException {
       details: { database },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -31,7 +31,7 @@ export class DatabaseQueryException extends BaseException {
       code: 'DATABASE_QUERY_ERROR',
       details: { query },
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -48,7 +48,7 @@ export class DatabaseTransactionException extends BaseException {
       code: 'DATABASE_TRANSACTION_ERROR',
       details: { operation },
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -58,13 +58,17 @@ export class DatabaseTransactionException extends BaseException {
  * Used when database constraints are violated
  */
 export class DatabaseConstraintException extends BaseException {
-  constructor(constraint: string, table: string, options: ExceptionOptions = {}) {
+  constructor(
+    constraint: string,
+    table: string,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `Database constraint violated: ${constraint}`,
       statusCode: StatusCodes.CONFLICT,
       code: 'DATABASE_CONSTRAINT_VIOLATION',
       details: { constraint, table },
-      ...options
+      ...options,
     });
   }
 }
@@ -74,7 +78,11 @@ export class DatabaseConstraintException extends BaseException {
  * Used when an external service call fails
  */
 export class ExternalServiceException extends BaseException {
-  constructor(service: string, endpoint: string, options: ExceptionOptions = {}) {
+  constructor(
+    service: string,
+    endpoint: string,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `External service error: ${service}`,
       statusCode: StatusCodes.SERVICE_UNAVAILABLE,
@@ -82,7 +90,7 @@ export class ExternalServiceException extends BaseException {
       details: { service, endpoint },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -92,7 +100,11 @@ export class ExternalServiceException extends BaseException {
  * Used when an external service call times out
  */
 export class ExternalServiceTimeoutException extends BaseException {
-  constructor(service: string, timeout: number, options: ExceptionOptions = {}) {
+  constructor(
+    service: string,
+    timeout: number,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `External service timeout: ${service}`,
       statusCode: StatusCodes.GATEWAY_TIMEOUT,
@@ -100,7 +112,7 @@ export class ExternalServiceTimeoutException extends BaseException {
       details: { service, timeout },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -118,7 +130,7 @@ export class ExternalServiceUnavailableException extends BaseException {
       details: { service },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -136,7 +148,7 @@ export class CacheException extends BaseException {
       details: { operation, key },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -153,7 +165,7 @@ export class FileSystemException extends BaseException {
       code: 'FILE_SYSTEM_ERROR',
       details: { operation, path },
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -171,7 +183,7 @@ export class NetworkException extends BaseException {
       details: { operation, url },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
 }
@@ -181,7 +193,12 @@ export class NetworkException extends BaseException {
  * Used when third-party API calls fail
  */
 export class ThirdPartyAPIException extends BaseException {
-  constructor(api: string, endpoint: string, statusCode?: number, options: ExceptionOptions = {}) {
+  constructor(
+    api: string,
+    endpoint: string,
+    statusCode?: number,
+    options: ExceptionOptions = {}
+  ) {
     super({
       message: `Third-party API error: ${api}`,
       statusCode: statusCode || StatusCodes.SERVICE_UNAVAILABLE,
@@ -189,7 +206,7 @@ export class ThirdPartyAPIException extends BaseException {
       details: { api, endpoint, apiStatusCode: statusCode },
       retryable: true,
       isOperational: false,
-      ...options
+      ...options,
     });
   }
-} 
+}

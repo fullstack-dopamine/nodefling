@@ -22,5 +22,5 @@ global.console = {
   warn: vi.fn(),
   log: vi.fn(),
   info: vi.fn(),
-  debug: vi.fn()
-}; 
+  debug: vi.fn(),
+};

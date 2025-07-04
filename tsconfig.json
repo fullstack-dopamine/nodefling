@@ -2,9 +2,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-    "lib": [
-      "ES2020"
-    ],
+    "lib": ["ES2020"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -25,15 +23,13 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*", "src/**/*.test.ts", "src/__tests__/**/*.ts"],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts",
-    "**/__tests__/**",
     "coverage",
-    "examples"
+    "examples",
+    ".eslintrc.js",
+    "examples/express-example.ts"
   ]
 }

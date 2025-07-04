@@ -47,7 +47,7 @@ export abstract class BaseException extends Error {
       context = {},
       isOperational = true,
       retryable = false,
-      logLevel = 'error'
+      logLevel = 'error',
     } = options;
 
     super(message);
@@ -92,7 +92,7 @@ export abstract class BaseException extends Error {
       isOperational: this.isOperational,
       retryable: this.retryable,
       logLevel: this.logLevel,
-      stack: this.stack
+      stack: this.stack,
     };
   }
 
@@ -105,8 +105,8 @@ export abstract class BaseException extends Error {
         name: this.name,
         message: this.message,
         code: this.code,
-        statusCode: this.statusCode
-      }
+        statusCode: this.statusCode,
+      },
     };
 
     // Only include details in development or if explicitly configured
@@ -178,6 +178,9 @@ export abstract class BaseException extends Error {
    * Get the status message for this exception
    */
   public getStatusMessage(): string {
-    return StatusMessages[this.statusCode as keyof typeof StatusMessages] || 'Unknown Error';
+    return (
+      StatusMessages[this.statusCode as keyof typeof StatusMessages] ||
+      'Unknown Error'
+    );
   }
-} 
+}
